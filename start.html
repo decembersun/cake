@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>The Inquisitive Guereza Cake Quest!</title>
+
+<!-- script, in the head, links to the other document -->
+<!-- <script type="text/Javascript" src="start.js"></script>  -->
+</head>
+
+<!---- onload is what executes a javasript function -->
+
+<body style="background-color: black">
+
+
+    <img id="atom" style="width: 50px; position:absolute;" src="atom.png">
+    
+
+    <img id="ufo" style="width: 50px; position:absolute; top:0; left:0;
+    -webkit-transition: all 0.2s;" src="ufo.png">
+
+    <p id="scoreTB" style="position: absolute; color:white;">Score: 0</p>
+    <p id="timeTB" style="position: absolute; right:50px; color:burlywood;">Time: 0</p>
+
+  <!-- <img src="cakequest1.jpg" alt="the guereza wants to get the cake!" /> -->
+</body>
+<script>
+var score=0, gameTime=0, gameTimer, ufoX=0, ufoY=0, atomX=0, atomY=0;
+onkeydown=handleKeys;
+onready=startUp();
+
+// functions that set any element's coordinates
+function setLeft(id,x)
+    {
+    document.getElementById(id).style.left=x+"px";
+    }
+
+function setTop(id,y)
+    {
+    document.getElementById(id).style.top=y+"px";
+    }
+
+// function that returns arandom number between two values
+function randomNumber(low,high){return(Math.floor(low+Math.random()*(1+high-low)));}
+
+// startup function
+// moves atom/cake to a random location
+function startUp(){
+   moveAtom();
+   gameTimer=window.setInterval(displayTime, 1000);
+}
+
+// this variable will show how long the game has been running
+function displayTime(){
+   gameTime++;
+   document.getElementById("timeTB").innerText="Time:"+gameTime;
+
+}
+
+// function that moves atom/cake to a random place on the screen
+function moveAtom(){
+    atomX=randomNumber(2,8);
+    atomY=randomNumber(2,8);
+    setLeft("atom",50*atomX);
+    setTop("atom",50*atomY);
+
+}
+
+function handleKeys(e){
+    if(e.keyCode==37 && ufoX > 0){ufoX--;}    // left
+    if(e.keyCode==39 && ufoX < 20){ufoX++;}   // right
+    if(e.keyCode==38 && ufoY > 0){ufoY--;}  // down
+    if(e.keyCode==40 && ufoY < 10){ufoY++;}  // up
+    setLeft("ufo",50*ufoX);  // sets the new ufo location
+    setTop("ufo",50*ufoY);   // sets the new ufo location
+    checkIfHitAtom();
+
+
+}
+
+// check for hit, and see if we need to end the game
+function checkIfHitAtom(){
+    if((ufoX==atomX) && (ufoY==atomY)){
+        score++;
+        document.getElementById("scoreTB").innerText="Score: "+score;
+        moveAtom();
+        if(score==5){gameOver();}
+    }
+
+}
+
+function gameOver(){
+    clearInterval(gameTimer);
+    alert("Good job! You ate the cake. Your time was: "+gameTime+" seconds");
+    location.reload();
+}
+
+</script>
+
+
+</html>
